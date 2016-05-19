@@ -23,10 +23,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:ellipsize="end"
+            android:maxLength="80"
             android:layout_margin="8dp"
-            android:text="clip1"
+            android:text="An aging musical group calls it quits, but demonstrates that its music is timeless."
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="14sp"
             android:textStyle="bold|italic" />
     </FrameLayout>
     <FrameLayout
@@ -44,9 +46,11 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_margin="8dp"
-            android:text="clip2"
+            android:ellipsize="end"
+            android:maxLength="80"
+            android:text="Flight 804, carrying 66 people en route to Cairo from Paris, disappeared shortly before it was due to land. The reason was unclear, but the developments touched off fears about terrorism."
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="14sp"
             android:textStyle="bold|italic" />
     </FrameLayout>
     <FrameLayout
@@ -65,9 +69,11 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_margin="8dp"
-            android:text="clip3"
+            android:ellipsize="end"
+            android:maxLength="80"
+            android:text="An overwhelming majority of Republican voters say their party’s leaders should get behind Donald J. Trump, according to the latest Times/CBS News poll."
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="14sp"
             android:textStyle="bold|italic" />
     </FrameLayout>
     <FrameLayout
@@ -79,16 +85,22 @@
         android:layout_below="@+id/txtC"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <ImageView
+            android:id="@+id/img4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/psm_talking_on_phone2"/>
         <TextView
             android:id="@+id/txt4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:visibility="gone"
             android:layout_margin="8dp"
             android:text="clip4"
             android:textColor="#ffffff"
-            android:textSize="24sp"
+            android:textSize="14sp"
             android:textStyle="bold|italic" />
     </FrameLayout>
 
