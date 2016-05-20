@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.sharedclipboard.R;
 
@@ -65,7 +68,24 @@ public class TextClippingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_text_clippings, container, false);
+        View textClippingFragmentView = inflater.inflate(R.layout.fragment_text_clippings, container, false);
+
+        String s[] = {"the", "world"};
+        TextClippingArrayAdapter adapter = new TextClippingArrayAdapter(getActivity(), s);
+        ListView list = (ListView) textClippingFragmentView.findViewById(R.id.list);
+        if(adapter != null)
+            list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(getActivity(), "You Clicked at " + position, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        return textClippingFragmentView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
