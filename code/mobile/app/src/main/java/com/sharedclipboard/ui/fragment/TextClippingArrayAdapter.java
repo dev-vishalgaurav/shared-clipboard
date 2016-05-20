@@ -39,8 +39,16 @@ public class TextClippingArrayAdapter extends ArrayAdapter<String> {
         TextView bottomTextView = (TextView) rowView.findViewById(R.id.bottom_text);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
 
-        topTextView.setText("Test Text");
-        bottomTextView.setText("This is the bottom text This is the bottom text This is the bottom text");
+        if(position == 0) {
+            topTextView.setText("20 minutes ago");
+            bottomTextView.setText("An aging musical group calls it quits, but demonstrates that its music is timeless.");
+        } else if(position == 1) {
+            topTextView.setText("22 minutes ago");
+            bottomTextView.setText("Flight 804, carrying 66 people en route to Cairo from Paris, disappeared shortly before it was due to land. The reason was unclear, but the developments touched off fears about terrorism.");
+        } else {
+            topTextView.setText("23 minutes ago");
+            bottomTextView.setText("An overwhelming majority of Republican voters say their party’s leaders should get behind Donald J. Trump, according to the latest Times/CBS News poll.");
+        }
 
         imageView.setImageResource(R.mipmap.info_icon);
 

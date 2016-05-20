@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.sharedclipboard.R;
 
@@ -70,7 +69,7 @@ public class TextClippingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View textClippingFragmentView = inflater.inflate(R.layout.fragment_text_clippings, container, false);
 
-        String s[] = {"the", "world"};
+        String s[] = {"the", "world", ""};
         TextClippingArrayAdapter adapter = new TextClippingArrayAdapter(getActivity(), s);
         ListView list = (ListView) textClippingFragmentView.findViewById(R.id.list);
         if(adapter != null)
@@ -80,7 +79,6 @@ public class TextClippingsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "You Clicked at " + position, Toast.LENGTH_SHORT).show();
 
             }
         });
