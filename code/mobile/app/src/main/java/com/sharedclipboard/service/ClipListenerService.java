@@ -54,8 +54,13 @@ public class ClipListenerService extends Service {
             Log.e("VVV","onPrimaryClipChanged");
             ClipData clip = mClipManager.getPrimaryClip();
             int total = clip.getItemCount();
-            String msg = clip.getItemAt(0).getText().toString();
-            sendNotification(msg);
+            Log.e("VVV","Total clip items = " + total);
+            if(total > 0) {
+                ClipData.Item item  = clip.getItemAt(0);
+                if(item!=null) {
+                    sendNotification(item.getText().toString());
+                }
+            }
         }
     };
     private void sendNotification(String message) {
