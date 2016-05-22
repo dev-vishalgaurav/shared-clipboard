@@ -10,11 +10,14 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.sharedclipboard.HomeActivity;
 import com.sharedclipboard.R;
+import com.sharedclipboard.SharedClipperApp;
+import com.sharedclipboard.storage.db.models.Clipping;
 
 public class ClipListenerService extends Service {
     private ClipboardManager mClipManager = null;
@@ -58,6 +61,9 @@ public class ClipListenerService extends Service {
             if(total > 0) {
                 ClipData.Item item  = clip.getItemAt(0);
                 if(item!=null) {
+                    Clipping clipping = new Clipping(item.getText().toString(),1, System.currentTimeMillis());
+                    long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
+                    Log.e("VVV","Cliiping insert ID = " + id );
                     sendNotification(item.getText().toString());
                 }
             }
