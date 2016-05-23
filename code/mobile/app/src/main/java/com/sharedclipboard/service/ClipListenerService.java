@@ -3,8 +3,10 @@ package com.sharedclipboard.service;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -57,11 +59,9 @@ public class ClipListenerService extends Service {
         public void onPrimaryClipChanged() {
             Log.e("VVV","onPrimaryClipChanged");
             ClipData clip = mClipManager.getPrimaryClip();
-            int total = clip.getItemCount();
-            Log.e("VVV","Total clip items = " + total);
-            if(total > 0) {
+            if(clip.getItemCount() > 0) {
                 ClipData.Item item  = clip.getItemAt(0);
-                if(item!=null) {
+                if(item!=null && item.getText() != null) {
                     Clipping clipping = new Clipping(item.getText().toString(),1, System.currentTimeMillis());
                     long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
                     Log.e("VVV","Clipping insert ID = " + id );
@@ -74,7 +74,10 @@ public class ClipListenerService extends Service {
 
     private void updateWidgets() {
         Log.e("VVV","ClipListenerService :- updateWidgets");
-        Intent intent = new Intent(ClippingWidget.ACTION_UPDATE);
+        Intent intent = new Intent(this,ClippingWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ClippingWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
         sendBroadcast(intent);
     }
 

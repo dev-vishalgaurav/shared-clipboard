@@ -39,18 +39,21 @@ public class ClippingWidget extends AppWidgetProvider {
     }
 
     private static void updateRemoteView(Context context,RemoteViews views) {
+        resetRemoteView(context,views);
         List<Clipping> clippings = Clipping.getAllClippings(SharedClipperApp.getDb(context).getClippingAll(true));
+        Log.e("VVV","Total clippings = " + clippings.size());
         int[] textViews = {R.id.txt1,R.id.txt2,R.id.txt3,R.id.txt4};
-        for (int i = 0 ; i < clippings.size() ; i++){
+        for (int i = 0 ; (i < clippings.size() && i < 4 ) ; i++){
             views.setTextViewText(textViews[i],clippings.get(i).getClipping());
         }
     }
 
     private static void resetRemoteView(Context context, RemoteViews views){
-        views.setInt(R.id.txt1, "setVisibility", View.GONE);
+        /*views.setInt(R.id.txt1, "setVisibility", View.GONE);
         views.setInt(R.id.txt2, "setVisibility", View.GONE);
         views.setInt(R.id.txt3, "setVisibility", View.GONE);
         views.setInt(R.id.txt4, "setVisibility", View.GONE);
+        views.setInt(R.id.img4, "setVisibility", View.GONE);*/
         views.setInt(R.id.img4, "setVisibility", View.GONE);
         views.setTextViewText(R.id.txt1,context.getString(R.string.no_clippings));
         views.setTextViewText(R.id.txt2,context.getString(R.string.no_clippings));
