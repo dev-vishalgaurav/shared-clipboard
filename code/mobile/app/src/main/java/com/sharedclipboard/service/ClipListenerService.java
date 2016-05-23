@@ -18,6 +18,7 @@ import com.sharedclipboard.HomeActivity;
 import com.sharedclipboard.R;
 import com.sharedclipboard.SharedClipperApp;
 import com.sharedclipboard.storage.db.models.Clipping;
+import com.sharedclipboard.ui.widget.ClippingWidget;
 
 public class ClipListenerService extends Service {
     private ClipboardManager mClipManager = null;
@@ -63,12 +64,20 @@ public class ClipListenerService extends Service {
                 if(item!=null) {
                     Clipping clipping = new Clipping(item.getText().toString(),1, System.currentTimeMillis());
                     long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
-                    Log.e("VVV","Cliiping insert ID = " + id );
+                    Log.e("VVV","Clipping insert ID = " + id );
                     sendNotification(item.getText().toString());
+                    updateWidgets();
                 }
             }
         }
     };
+
+    private void updateWidgets() {
+        Log.e("VVV","ClipListenerService :- updateWidgets");
+        Intent intent = new Intent(ClippingWidget.ACTION_UPDATE);
+        sendBroadcast(intent);
+    }
+
     private void sendNotification(String message) {
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
