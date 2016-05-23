@@ -1,5 +1,6 @@
 package com.sharedclipboard.ui.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.widget.RemoteViews;
 
 import com.sharedclipboard.R;
 import com.sharedclipboard.SharedClipperApp;
+import com.sharedclipboard.service.ClipListenerService;
 import com.sharedclipboard.storage.db.models.Clipping;
 
 import java.util.List;
@@ -19,8 +21,6 @@ import java.util.List;
  */
 public class ClippingWidget extends AppWidgetProvider {
 
-    public static final String ACTION_UPDATE = "android.appwidget.action.APPWIDGET_UPDATE";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -29,7 +29,6 @@ public class ClippingWidget extends AppWidgetProvider {
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Log.e("VVV","updateAppWidget");
-        CharSequence widgetText = context.getString(R.string.appwidget_text) + "1";
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.clipping_widget);
         //views.setTextViewText(R.id.appwidget_text, widgetText);
@@ -44,8 +43,19 @@ public class ClippingWidget extends AppWidgetProvider {
         Log.e("VVV","Total clippings = " + clippings.size());
         int[] textViews = {R.id.txt1,R.id.txt2,R.id.txt3,R.id.txt4};
         for (int i = 0 ; (i < clippings.size() && i < 4 ) ; i++){
-            views.setTextViewText(textViews[i],clippings.get(i).getClipping());
+            Clipping clip = clippings.get(i);
+            Log.e("VVV","date = " + clip.getDate());
+            views.setTextViewText(textViews[i],clip.getClipping());
+            views.setOnClickPendingIntent(textViews[i],getPendingIntent(context,clip));
         }
+    }
+
+    private static PendingIntent getPendingIntent(Context context, Clipping clip) {
+        Intent intent = new Intent(context, ClipListenerService.class);
+        intent.putExtra(ClipListenerService.EXTRA_ACTION_TYPE,ClipListenerService.ACTION_TYPE_CLICK);
+        intent.putExtra(ClipListenerService.EXTRA_CLIPPING_ID,clip.getId());
+        PendingIntent pIntent = PendingIntent.getService(context,(int)clip.getId(),intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        return pIntent;
     }
 
     private static void resetRemoteView(Context context, RemoteViews views){

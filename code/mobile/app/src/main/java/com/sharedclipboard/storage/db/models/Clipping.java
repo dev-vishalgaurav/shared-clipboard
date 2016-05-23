@@ -1,5 +1,6 @@
 package com.sharedclipboard.storage.db.models;
 
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -88,6 +89,11 @@ public class Clipping {
         return values;
     }
 
+    public ClipData toClipData(){
+        ClipData data = ClipData.newPlainText("",getClipping());
+        return data;
+    }
+
     /**
      * it needs a cursor which has query results for a set of clippings
      * @param cursor
@@ -100,4 +106,5 @@ public class Clipping {
         }
         return result;
     }
+
 }

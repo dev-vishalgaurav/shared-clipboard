@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.sharedclipboard.HomeActivity;
 import com.sharedclipboard.R;
@@ -23,12 +24,59 @@ import com.sharedclipboard.storage.db.models.Clipping;
 import com.sharedclipboard.ui.widget.ClippingWidget;
 
 public class ClipListenerService extends Service {
+
+    public static final String EXTRA_ACTION_TYPE = "extra_action_type";
+    public static final String EXTRA_CLIPPING_ID = "extra_clipping_id";
+    public static final int ACTION_TYPE_CLICK = 1;
+
+
+
     private ClipboardManager mClipManager = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
         Log.e("VVV","ClipListenerService :- onCreate");
         initClipper();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if(intent.hasExtra(EXTRA_ACTION_TYPE)){
+            doClippingAction(intent);
+        }
+        return START_NOT_STICKY;
+    }
+
+    private void doClippingAction(Intent intent){
+        Log.e("VVV","doClippingAction");
+        int actionType = intent.getIntExtra(EXTRA_ACTION_TYPE,-1);
+        if(actionType == ACTION_TYPE_CLICK){
+            Log.e("VVV","ACTION_TYPE_CLICK");
+            long id = intent.getLongExtra(EXTRA_CLIPPING_ID,-1);
+            Log.e("VVV", "clicked clipping id = " + id);
+            if(id > 0){
+                copyToClipboard(id);
+            }
+        }
+    }
+
+    private void copyToClipboard(long id) {
+        Log.e("VVV", "ClipListenerService copyToClipboard() id = " + id);
+        try {
+            Clipping clipping = new Clipping(SharedClipperApp.getDb(getBaseContext()).getClipping(id));
+            if(mClipManager != null){
+                mClipManager.removePrimaryClipChangedListener(mClipListener);
+                mClipManager.setPrimaryClip(clipping.toClipData());
+                mClipManager.addPrimaryClipChangedListener(mClipListener);
+                Toast.makeText(getBaseContext(),getString(R.string.copied_to_clipboard),Toast.LENGTH_SHORT).show();
+                Log.e("VVV","copied to clipboard");
+            }
+        }catch (Exception ex){
+            Log.e("VVV" , "Exception in copying clipping");
+            ex.printStackTrace();
+        }
+
     }
 
     private void initClipper(){
