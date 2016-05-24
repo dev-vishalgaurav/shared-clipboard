@@ -146,4 +146,15 @@ public class ClipListenerService extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
+    public static Intent getSwapClippingIntent(Context context, Clipping clip){
+        Intent intent = new Intent(context, ClipListenerService.class);
+        intent.putExtra(ClipListenerService.EXTRA_ACTION_TYPE,ClipListenerService.ACTION_TYPE_CLICK);
+        intent.putExtra(ClipListenerService.EXTRA_CLIPPING_ID,clip.getId());
+        return intent;
+    }
+
+    public static void swapClipping(Context context, Clipping clipData) {
+        context.startService(getSwapClippingIntent(context,clipData));
+    }
 }

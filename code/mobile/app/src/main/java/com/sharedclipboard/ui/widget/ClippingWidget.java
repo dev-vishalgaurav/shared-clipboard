@@ -51,10 +51,7 @@ public class ClippingWidget extends AppWidgetProvider {
     }
 
     private static PendingIntent getPendingIntent(Context context, Clipping clip) {
-        Intent intent = new Intent(context, ClipListenerService.class);
-        intent.putExtra(ClipListenerService.EXTRA_ACTION_TYPE,ClipListenerService.ACTION_TYPE_CLICK);
-        intent.putExtra(ClipListenerService.EXTRA_CLIPPING_ID,clip.getId());
-        PendingIntent pIntent = PendingIntent.getService(context,(int)clip.getId(),intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pIntent = PendingIntent.getService(context,(int)clip.getId(),ClipListenerService.getSwapClippingIntent(context,clip),PendingIntent.FLAG_UPDATE_CURRENT);
         return pIntent;
     }
 
