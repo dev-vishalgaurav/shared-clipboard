@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.sharedclipboard.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by Girouard23 on 5/19/16.
  */
@@ -24,10 +26,15 @@ public class TextClippingArrayAdapter extends ArrayAdapter<String> {
     };
 
 
-    public TextClippingArrayAdapter(Context context, String s[]) {
+    public TextClippingArrayAdapter(Context context, ArrayList<String> s) {
 
         super(context, R.layout.text_clipping_list_item, s);
         this.context = (Activity) context;
+    }
+
+    @Override
+    public void add(String object) {
+        super.add(object);
     }
 
     @Override
@@ -39,16 +46,9 @@ public class TextClippingArrayAdapter extends ArrayAdapter<String> {
         TextView bottomTextView = (TextView) rowView.findViewById(R.id.bottom_text);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
 
-        if(position == 0) {
-            topTextView.setText("20 minutes ago");
-            bottomTextView.setText("An aging musical group calls it quits, but demonstrates that its music is timeless.");
-        } else if(position == 1) {
-            topTextView.setText("22 minutes ago");
-            bottomTextView.setText("Flight 804, carrying 66 people en route to Cairo from Paris, disappeared shortly before it was due to land. The reason was unclear, but the developments touched off fears about terrorism.");
-        } else {
-            topTextView.setText("23 minutes ago");
-            bottomTextView.setText("An overwhelming majority of Republican voters say their party’s leaders should get behind Donald J. Trump, according to the latest Times/CBS News poll.");
-        }
+        topTextView.setText("20 minutes ago");
+        bottomTextView.setText(getItem(position));
+
 
         imageView.setImageResource(R.mipmap.info_icon);
 

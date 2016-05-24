@@ -1,9 +1,14 @@
 package com.sharedclipboard.ui.fragment;
 
+//import android.app.LoaderManager;
+
+
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.sharedclipboard.R;
+import com.sharedclipboard.storage.db.models.Clipping;
+import com.sharedclipboard.ui.asyncTasks.TextClippingsDataLoader;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+//import android.content.Loader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,11 +32,14 @@ import com.sharedclipboard.R;
  * Use the {@link TextClippingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TextClippingsFragment extends Fragment {
+public class TextClippingsFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Clipping>> {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    TextClippingArrayAdapter adapter;
+    Context context;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,7 +85,8 @@ public class TextClippingsFragment extends Fragment {
         View textClippingFragmentView = inflater.inflate(R.layout.fragment_text_clippings, container, false);
 
         String s[] = {"the", "world", ""};
-        TextClippingArrayAdapter adapter = new TextClippingArrayAdapter(getActivity(), s);
+        ArrayList<String> sList = new ArrayList<String>(Arrays.asList(s));
+        adapter = new TextClippingArrayAdapter(getActivity(), sList);
         ListView list = (ListView) textClippingFragmentView.findViewById(R.id.list);
         if(adapter != null)
             list.setAdapter(adapter);
@@ -82,6 +98,8 @@ public class TextClippingsFragment extends Fragment {
 
             }
         });
+
+        context = getActivity();
 
         return textClippingFragmentView;
     }
@@ -118,5 +136,42 @@ public class TextClippingsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //async load of the entries
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    public void load() {
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+
+    @Override
+    public Loader<ArrayList<Clipping>> onCreateLoader(int i, Bundle bundle) {
+        return new TextClippingsDataLoader(context);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Clipping>> loader, ArrayList<Clipping> clippings) {
+        //give the adapter the clippings
+        adapter.clear();
+        for(Clipping clipping : clippings) {
+            clipping.getDateString();
+
+            adapter.add(clipping.getClipping());
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Clipping>> loader) {
+        adapter.clear();
     }
 }
