@@ -17,6 +17,6 @@
             Once you have your API key (which starts with “AIza...”), replace the "gcm.api.key" string in this file.
             -->
 
-        <property name="gcm.api.key" value="AIzaSyCqIebuZjN9siJlSZCHSqS7ngcFzh7mPTw"/>
+        <property name="gcm.api.key" value="AIzaSyD6oQPJqVZ-xQQefz7IRvdJhQ9fHPjWSYU"/>
     </system-properties>
 </appengine-web-app>

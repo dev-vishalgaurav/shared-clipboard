@@ -26,6 +26,7 @@ import com.google.android.gms.iid.InstanceID;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.sharedclipboard.R;
+import com.sharedclipboard.network.NetworkUtils;
 import com.sharedclipboard.registration.Registration;
 import com.sharedclipboard.storage.preferences.PreferenceUtils;
 
