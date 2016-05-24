@@ -7,7 +7,7 @@ import android.net.Uri;
  */
 public class NetworkUtils {
 
-    public static final String SERVER_URL = "https://myruns-cs165.appspot.com/";
+    public static final String SERVER_URL = "https://teak-passage-132116.appspot.com/";
     public static final String API_REGISTRATION = "_ah/api/";
     public static final String API_POST = "post.do";
     public static final Uri URL_POST = Uri.parse(SERVER_URL + API_POST);
