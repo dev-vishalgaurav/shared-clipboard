@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "517185642228",
+    "project_id": "default-demo-app-257c6"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517185642228:android:ac797b03fc4cad42",
+        "android_client_info": {
+          "package_name": "com.sharedclipboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSGp2enEO6-xkZYyAO7nPH7mh6uTbrn6M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
