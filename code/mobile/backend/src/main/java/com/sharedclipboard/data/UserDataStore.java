@@ -21,10 +21,10 @@ public class UserDataStore {
 
     /*
     * Creates new user
-    * returns -1 if email already in use
-    * returns 1 if success
+    * returns "" if the username is already in use
+    * returns passcode if creating the user was successful
      */
-    public static int createNewUser(String username, String password) {
+    public static String createNewUser(String username, String password) {
         Filter propertyFilter = new FilterPredicate("username", FilterOperator.EQUAL, username);
         Query q = new Query("User").setFilter(propertyFilter);
 
@@ -32,14 +32,15 @@ public class UserDataStore {
 
         //fail if username already exists
         if(results.size() > 0)
-            return -1;
+            return "";
 
         Entity entry = new Entity("User", username);
         entry.setProperty("username", username);
         entry.setProperty("password", password);
-        entry.setProperty("passcode", generateRandomPasscode());
+        String passcode = generateRandomPasscode();
+        entry.setProperty("passcode", passcode);
         dataStore.put(entry);
-        return 1;
+        return passcode;
 
     }
 
@@ -66,24 +67,25 @@ public class UserDataStore {
     }
 
     /*
-    *returns true if the username/password combo is valid
-    * false if invalid
+    * returns passcode if the username/password combo is valid
+    * returns "" if invalid
      */
-    public static boolean correctUsernamePassword(String username, String password) {
+    public static String correctUsernamePassword(String username, String password) {
         Filter propertyFilter = new FilterPredicate("username", FilterOperator.EQUAL, username);
         Query q = new Query("User").setFilter(propertyFilter);
 
         List<Entity> results = dataStore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 
-        if(results.size() != 0)
-            return false;
+        if(results.size() != 1)
+            return "";
 
         Entity userEntity = results.get(0);
         String entityPassword = (String) userEntity.getProperty("password");
+        String passcode = (String) userEntity.getProperty("passcode");
         if(password.equals(entityPassword))
-            return true;
+            return passcode;
 
-        return false;
+        return "";
     }
 }
 
