@@ -163,8 +163,6 @@ public class TextClippingsFragment extends Fragment implements LoaderManager.Loa
         //give the adapter the clippings
         adapter.clear();
         for(Clipping clipping : clippings) {
-            clipping.getDateString();
-
             adapter.add(clipping.getClipping());
         }
         adapter.notifyDataSetChanged();

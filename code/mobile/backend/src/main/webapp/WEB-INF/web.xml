@@ -23,7 +23,7 @@
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.girouard.myruns6.backend.LoginServlet</servlet-class>
+        <servlet-class>com.sharedclipboard.servlets.LoginServlet</servlet-class>
     </servlet>
     <!-- map servlet to urls-->
     <servlet-mapping>

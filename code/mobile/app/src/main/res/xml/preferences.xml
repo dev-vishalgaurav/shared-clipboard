@@ -5,8 +5,8 @@
         android:title="Web ID">
 
         <PreferenceScreen
-            android:title="ID"
-            android:summary="Unknown">
+            android:title="Unknown"
+            android:key="passcode">
         </PreferenceScreen>
 
     </PreferenceCategory>

@@ -24,7 +24,7 @@ public class PreferenceUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = preferences.edit();
         edit.putString(key, value);
-        edit.commit();
+        edit.apply();
     }
 
     /**

@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,10 +28,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sharedclipboard.HomeActivity;
 import com.sharedclipboard.R;
+import com.sharedclipboard.network.NetworkUtils;
+import com.sharedclipboard.storage.preferences.PreferenceUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +51,8 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+
+    private String loginEndpoint = NetworkUtils.SERVER_URL + "login.do";
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -310,23 +323,71 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+            URL url;
             try {
-                // Simulate network access.
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                return false;
+                url = new URL(loginEndpoint);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                throw new IllegalArgumentException("invalid url: " + loginEndpoint);
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            String body = "username=" + mEmail + "&password=" + mPassword;
+            Log.d("Url", url.toString());
+
+            byte[] bytes = body.getBytes();
+            HttpURLConnection conn = null;
+            try {
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setUseCaches(false);
+                conn.setFixedLengthStreamingMode(bytes.length);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type",
+                        "application/x-www-form-urlencoded;charset=UTF-8");
+                // post the request
+                OutputStream out = conn.getOutputStream();
+                out.write(bytes);
+                out.close();
+
+                // handle the response
+                int status = conn.getResponseCode();
+                Log.d("TAGG", "" + status);
+                if(status == 202) {
+                    Toast.makeText(getBaseContext(), "Invalid Password", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else if (status != 200) {
+                    return false;
+                    //throw new IOException("Post failed with error code " + status);
+                } else {
+                    String passcode = conn.getHeaderField("Passcode");
+                    Log.d("Passcode", passcode);
+                    PreferenceUtils.putString(getBaseContext(), "passcode", passcode);
+                    Log.d("Passcode", PreferenceUtils.getString(getBaseContext(), "passcode","null"));
+
+                }
+
+                // Get Response
+                InputStream is = conn.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                String line;
+                StringBuffer response = new StringBuffer();
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\n');
+                }
+                rd.close();
+                return true;
+
+            } catch(Exception e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
                 }
             }
 
-            // TODO: register the new account here.
-            return true;
+
         }
 
         @Override
