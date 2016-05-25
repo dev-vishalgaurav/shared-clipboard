@@ -14,4 +14,16 @@ public class Clipping {
         this.dateString = Long .toString(dateTime);
         this.text = text;
     }
+
+    public String getDateString() {
+        return this.dateString;
+    }
+
+    public long getDateTime() {
+        return this.dateTime;
+    }
+
+    public String getText() {
+        return this.text;
+    }
 }

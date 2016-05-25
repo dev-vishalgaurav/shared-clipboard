@@ -16,17 +16,17 @@ public class ClippingsDataStore {
 
     private static final DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
 
-    public static void addClipping(Clipping clipping, String email) {
-        Entity entry = new Entity("Clipping", email);
-        entry.setProperty("email", email);
+    public static void addClipping(Clipping clipping, String passcode) {
+        Entity entry = new Entity("Clipping", passcode);
+        entry.setProperty("passcode", passcode);
         entry.setProperty("text", clipping.text);
         entry.setProperty("dateString", clipping.dateString);
         entry.setProperty("dateTime", clipping.dateTime);
         dataStore.put(entry);
     }
 
-    public static ArrayList<Clipping> getAllClippingsWithEmail(String email) {
-        Query.Filter propertyFilter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
+    public static ArrayList<Clipping> getAllClippingsWithPasscode(String passcode) {
+        Query.Filter propertyFilter = new Query.FilterPredicate("passcode", Query.FilterOperator.EQUAL, passcode);
         Query q = new Query("Clipping").setFilter(propertyFilter).addSort("dateTime", Query.SortDirection.ASCENDING);
 
         List<Entity> results = dataStore.prepare(q).asList(FetchOptions.Builder.withDefaults());

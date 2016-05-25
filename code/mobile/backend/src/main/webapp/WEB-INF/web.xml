@@ -31,7 +31,28 @@
         <url-pattern>/login.do</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>com.sharedclipboard.servlets.HomeServlet</servlet-class>
+    </servlet>
+    <!-- map servlet to urls-->
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DisplayClippingsServlet</servlet-name>
+        <servlet-class>com.sharedclipboard.servlets.DisplayClippingsServlet</servlet-class>
+    </servlet>
+    <!-- map servlet to urls-->
+    <servlet-mapping>
+        <servlet-name>DisplayClippingsServlet</servlet-name>
+        <url-pattern>/display.do</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>home.do</welcome-file>
     </welcome-file-list>
 </web-app>

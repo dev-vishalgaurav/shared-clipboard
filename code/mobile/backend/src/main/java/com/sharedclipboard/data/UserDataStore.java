@@ -87,5 +87,20 @@ public class UserDataStore {
 
         return "";
     }
+
+    /*
+      * returns true if passcode is valid
+      * return false if passcode is invalid
+     */
+    public static boolean isValidPasscode(String passcode) {
+        Filter propertyFilter = new FilterPredicate("passcode", FilterOperator.EQUAL, passcode);
+        Query q = new Query("User").setFilter(propertyFilter);
+
+        List<Entity> results = dataStore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+        if(results.size() > 0)
+            return true;
+
+        return false;
+    }
 }
 
