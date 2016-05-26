@@ -2,6 +2,7 @@
     <string name="server_key">AIzaSyD6oQPJqVZ-xQQefz7IRvdJhQ9fHPjWSYU</string>
     <string name="sender_id">1037900536576</string>
     <string name="app_name">SharedClipboard</string>
+    <string name="ok">SharedClipboard</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="appwidget_text">EXAMPLE</string>

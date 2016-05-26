@@ -54,7 +54,10 @@
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+<<<<<<< HEAD
 
+=======
+>>>>>>> bbb7b3a11bff655e5073cea6b1a2879ba4d206a5
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

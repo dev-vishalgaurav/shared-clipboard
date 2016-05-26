@@ -18,6 +18,7 @@ package com.sharedclipboard.service;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -30,6 +31,8 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.sharedclipboard.HomeActivity;
 import com.sharedclipboard.R;
+import com.sharedclipboard.SharedClipperApp;
+import com.sharedclipboard.storage.db.models.Clipping;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,8 +60,13 @@ public class SCGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
         try {
-
-
+            int indexStart = message.indexOf("_");
+            if(indexStart > 0){
+                String time = message.substring(0,indexStart);
+                long time_l = Long.parseLong(time);
+                String clip = message.substring(indexStart + 1);
+                ClipListenerService.addNewClip(getBaseContext(),clip,time_l);
+            }
         }catch (NumberFormatException ex){
             ex.printStackTrace();
         }
