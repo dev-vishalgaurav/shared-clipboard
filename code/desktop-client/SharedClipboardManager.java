@@ -1,62 +1,80 @@
+import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.Toolkit;
-import java.io.*;
+import java.io.IOException;
 
-public final class SharedClipboardManager implements ClipboardOwner {
+public final class SharedClipboardManager extends Thread implements ClipboardOwner {
 
-  public static void main(String...  aArguments ){
-    SharedClipboardManager manager = new SharedClipboardManager ();
-    System.out.println("Clipboard contains:" + manager.getClipboardContents());
-    manager.setClipboardContents("This is copied to clipboard by me");
-    System.out.println("Clipboard contains:" + manager.getClipboardContents());
-  }
+    Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
 
-   /**
-   * Empty implementation of the ClipboardOwner interface.
-   */
-   @Override public void lostOwnership(Clipboard aClipboard, Transferable aContents){
-     //do nothing
-   }
-
-  /**
-  * Place a String on the clipboard, and make this class the
-  * owner of the Clipboard's contents.
-  */
-  public void setClipboardContents(String aString){
-    StringSelection stringSelection = new StringSelection(aString);
-    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    clipboard.setContents(stringSelection, this);
-  }
-
-  /**
-  * Get the String residing on the clipboard.
-  *
-  * @return any text found on the Clipboard; if none found, return an
-  * empty String.
-  */
-  public String getClipboardContents() {
-    String result = "";
-    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    //odd: the Object param of getContents is not currently used
-    Transferable contents = clipboard.getContents(null);
-    boolean hasTransferableText =
-      (contents != null) &&
-      contents.isDataFlavorSupported(DataFlavor.stringFlavor)
-    ;
-    if (hasTransferableText) {
-      try {
-        result = (String)contents.getTransferData(DataFlavor.stringFlavor);
-      }
-      catch (UnsupportedFlavorException | IOException ex){
-        System.out.println(ex);
-        ex.printStackTrace();
-      }
+    public void run() {
+        Transferable trans = sysClip.getContents(this);
+        regainOwnership(trans);
+        System.out.println("Listening to board...");
+        while (true) {
+        }
     }
-    return result;
-  }
+
+    private void waitForSomeTime(long millis) {
+        try {
+            System.out.println("waitForSomeTime " + millis);
+            Thread.sleep(50);
+        } catch (Exception e) {
+            System.out.println("Exception: " + e);
+        }
+    }
+
+    public void lostOwnership(Clipboard c, Transferable t) {
+        waitForSomeTime(50);
+        try {
+            accessAndProcessClip();
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+            waitForSomeTime(50);
+            accessAndProcessClip();
+        }
+    }
+
+    void accessAndProcessClip() {
+        Transferable contents = sysClip.getContents(this); // EXCEPTION
+        processContents(contents);
+        regainOwnership(contents);
+    }
+
+    void processContents(Transferable t) {
+        System.out.println("Processing: " + t);
+        System.out.println("Processing: " + getClipboardContents(t));
+    }
+
+    void regainOwnership(Transferable t) {
+        sysClip.setContents(t, this);
+    }
+
+    /**
+     * Get the String residing on the clipboard.
+     *
+     * @return any text found on the Clipboard; if none found, return an empty
+     * String.
+     */
+    public String getClipboardContents(Transferable contents) {
+        String result = "";
+        // odd: the Object param of getContents is not currently used
+        boolean hasTransferableText = (contents != null) && contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+        if (hasTransferableText) {
+            try {
+                result = (String) contents.getTransferData(DataFlavor.stringFlavor);
+            } catch (UnsupportedFlavorException | IOException ex) {
+                System.out.println(ex);
+                ex.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        new SharedClipboardManager().start();
+    }
 } 
