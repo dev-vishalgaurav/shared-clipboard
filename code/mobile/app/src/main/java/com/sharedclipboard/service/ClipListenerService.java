@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 import com.sharedclipboard.HomeActivity;
 import com.sharedclipboard.R;
 import com.sharedclipboard.SharedClipperApp;
+import com.sharedclipboard.network.ClippingUploadAsyncTask;
 import com.sharedclipboard.storage.db.models.Clipping;
 import com.sharedclipboard.ui.widget.ClippingWidget;
 
@@ -112,9 +112,11 @@ public class ClipListenerService extends Service {
                 if(item!=null && item.getText() != null) {
                     Clipping clipping = new Clipping(item.getText().toString(),1, System.currentTimeMillis());
                     long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
-                    Log.e("VVV","Clipping insert ID = " + id );
+                    Log.e("VVV", "Clipping insert ID = " + id);
                     sendNotification(item.getText().toString());
                     updateWidgets();
+                    ClippingUploadAsyncTask uploadAsyncTask = new ClippingUploadAsyncTask(getBaseContext());
+                    uploadAsyncTask.execute(item.getText().toString());
                 }
             }
         }

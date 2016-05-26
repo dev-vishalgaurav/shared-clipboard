@@ -43,13 +43,33 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>DisplayClippingsServlet</servlet-name>
-        <servlet-class>com.sharedclipboard.servlets.DisplayClippingsServlet</servlet-class>
-    </servlet>
+    <servlet-name>DisplayClippingsServlet</servlet-name>
+    <servlet-class>com.sharedclipboard.servlets.DisplayClippingsServlet</servlet-class>
+</servlet>
     <!-- map servlet to urls-->
     <servlet-mapping>
         <servlet-name>DisplayClippingsServlet</servlet-name>
         <url-pattern>/display.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AddClippingsServlet</servlet-name>
+        <servlet-class>com.sharedclipboard.servlets.AddClippingsServlet</servlet-class>
+    </servlet>
+    <!-- map servlet to urls-->
+    <servlet-mapping>
+        <servlet-name>AddClippingsServlet</servlet-name>
+        <url-pattern>/add.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AddDeviceServlet</servlet-name>
+        <servlet-class>com.sharedclipboard.servlets.AddDeviceServlet</servlet-class>
+    </servlet>
+    <!-- map servlet to urls-->
+    <servlet-mapping>
+        <servlet-name>AddDeviceServlet</servlet-name>
+        <url-pattern>/register.do</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

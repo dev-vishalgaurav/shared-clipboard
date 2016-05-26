@@ -51,6 +51,7 @@ public final class SharedClipboardManager extends Thread implements ClipboardOwn
 
     void regainOwnership(Transferable t) {
         sysClip.setContents(t, this);
+        System.out.println("regainOwnership...");
     }
 
     /**
@@ -77,4 +78,4 @@ public final class SharedClipboardManager extends Thread implements ClipboardOwn
     public static void main(String[] args) {
         new SharedClipboardManager().start();
     }
-} 
+}

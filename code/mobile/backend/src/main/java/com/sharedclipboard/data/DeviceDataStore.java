@@ -5,6 +5,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
+import com.sharedclipboard.RegistrationRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,29 +17,32 @@ public class DeviceDataStore {
 
     private static final DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
 
-    public static void insertDevice(String deviceKey, String email) {
+    public static void insertDevice(String deviceKey, String passcode) {
         Query.Filter propertyFilter = new Query.FilterPredicate("deviceKey", Query.FilterOperator.EQUAL, deviceKey);
         Query q = new Query("Device").setFilter(propertyFilter);
 
         List<Entity> results = dataStore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 
-        //return if device already exists
-        if(results.size() > 0)
-            return;
+        for(Entity entity : results) {
+            String entityPasscode = (String) entity.getProperty("passcode");
+            //check if passcode, deviceKey combo already exists
+            if(entityPasscode.equals(passcode))
+                return;
+        }
 
-        Entity entry = new Entity("Device", deviceKey);
+        Entity entry = new Entity("Device");
         entry.setProperty("deviceKey", deviceKey);
-        entry.setProperty("email", email);
+        entry.setProperty("passcode", passcode);
         dataStore.put(entry);
     }
 
     /*
-    *returns all device key strings associated with a specific email
+    *returns all device key strings associated with a specific passcode
      */
-    public static ArrayList<String> allDeviceKeys(String email) {
-        ArrayList<String> retList = new ArrayList<String>();
+    public static ArrayList<RegistrationRecord> allDeviceRegistrationRecords(String passcode) {
+        ArrayList<RegistrationRecord> retList = new ArrayList<RegistrationRecord>();
 
-        Query.Filter propertyFilter = new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email);
+        Query.Filter propertyFilter = new Query.FilterPredicate("passcode", Query.FilterOperator.EQUAL, passcode);
         Query q = new Query("Device").setFilter(propertyFilter);
 
         List<Entity> results = dataStore.prepare(q).asList(FetchOptions.Builder.withDefaults());
@@ -46,7 +50,9 @@ public class DeviceDataStore {
         String deviceKey;
         for(Entity entity : results) {
             deviceKey = (String) entity.getProperty("deviceKey");
-            retList.add(deviceKey);
+            RegistrationRecord record = new RegistrationRecord();
+            record.setRegId(deviceKey);
+            retList.add(record);
         }
 
         return retList;

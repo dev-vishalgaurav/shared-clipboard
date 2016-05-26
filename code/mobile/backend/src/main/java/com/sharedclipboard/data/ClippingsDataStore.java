@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class ClippingsDataStore {
     private static final DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
 
     public static void addClipping(Clipping clipping, String passcode) {
-        Entity entry = new Entity("Clipping", passcode);
+        Entity entry = new Entity("Clipping");
         entry.setProperty("passcode", passcode);
         entry.setProperty("text", clipping.text);
         entry.setProperty("dateString", clipping.dateString);
@@ -27,7 +28,8 @@ public class ClippingsDataStore {
 
     public static ArrayList<Clipping> getAllClippingsWithPasscode(String passcode) {
         Query.Filter propertyFilter = new Query.FilterPredicate("passcode", Query.FilterOperator.EQUAL, passcode);
-        Query q = new Query("Clipping").setFilter(propertyFilter).addSort("dateTime", Query.SortDirection.ASCENDING);
+        Query q = new Query("Clipping").setFilter(propertyFilter);
+        //q.addSort("dateTime", Query.SortDirection.ASCENDING);
 
         List<Entity> results = dataStore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 
@@ -39,6 +41,8 @@ public class ClippingsDataStore {
             Clipping clipping = new Clipping(dateTime, text);
             retClippings.add(clipping);
         }
+
+        Collections.sort(retClippings);
 
         return retClippings;
     }
