@@ -7,7 +7,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity
+import com.sharedclipboard.ui.activity.BaseActivity;
+
+public class MainActivity extends BaseActivity
 {
     GridView gridView;
     GridViewCustomAdapter gridViewCustomeAdapter;

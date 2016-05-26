@@ -16,8 +16,10 @@
 
 package com.sharedclipboard.service;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -25,12 +27,17 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.http.HttpStatusCodes;
 import com.sharedclipboard.R;
 import com.sharedclipboard.network.NetworkUtils;
 import com.sharedclipboard.registration.Registration;
 import com.sharedclipboard.storage.preferences.PreferenceUtils;
 
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class RegistrationIntentService extends IntentService {
@@ -86,20 +93,32 @@ public class RegistrationIntentService extends IntentService {
     private void sendRegistrationToServer(String token) throws  IOException{
         // Add custom implementation, as needed.
         Log.e("VVV", "sendRegistrationToServer -> " + token);
-        Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-                new AndroidJsonFactory(), null)
-                // Need setRootUrl and setGoogleClientRequestInitializer only for local testing,
-                // otherwise they can be skipped
-                .setRootUrl(NetworkUtils.URL_REGISTRATION.toString())
-                /*.setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                    @Override
-                    public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
-                            throws IOException {
-                        abstractGoogleClientRequest.setDisableGZipContent(true);
-                    }
-                })*/;
-        Registration regService = builder.build();
-        regService.register(token).execute();
+        String passcode = PreferenceUtils.getString(getBaseContext(),PreferenceUtils.PREF_PASSCODE, null);
+        PreferenceUtils.putString(getBaseContext(),PreferenceUtils.PREF_REGID,token);
+        if(passcode !=null){
+            try{
+                Log.e("VVV","sending passcode with reg id");
+                Uri uri = NetworkUtils.URL_REGISTRATION;
+                URL url = new URL(uri.toString() + "?" + PreferenceUtils.PREF_PASSCODE + "=" + passcode + "&" + PreferenceUtils.PREF_REGID + "=" + token);
+                HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+                httpConn.setUseCaches(true);
+                httpConn.setDoOutput(true);
+                httpConn.setRequestMethod("GET");
+                httpConn.connect();
+                int responseCode = httpConn.getResponseCode();
+                String responseMessage = httpConn.getResponseMessage();
+                if(responseCode == HttpStatusCodes.STATUS_CODE_OK){
+                    // success
+                    Log.e("VVV","RegistrationService  :- Success");
+                }else{
+                    //failure
+                    Log.e("VVV","RegistrationService  :- FAILSD");
+                }
+        }catch (IOException ex){
+            Log.e("VVV","MuRunsSyncService :- Error");
+            ex.printStackTrace();
+        }
+        }
     }
 
     /**

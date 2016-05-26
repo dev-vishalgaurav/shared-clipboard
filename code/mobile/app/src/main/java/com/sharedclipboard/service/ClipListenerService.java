@@ -27,7 +27,10 @@ public class ClipListenerService extends Service {
 
     public static final String EXTRA_ACTION_TYPE = "extra_action_type";
     public static final String EXTRA_CLIPPING_ID = "extra_clipping_id";
+    public static final String EXTRA_CLIP = "extra_clip";
+    public static final String EXTRA_CLIP_TIME = "extra_clip_time";
     public static final int ACTION_TYPE_CLICK = 1;
+    public static final int ACTION_TYPE_ADD = 2;
 
 
 
@@ -58,6 +61,25 @@ public class ClipListenerService extends Service {
             if(id > 0){
                 copyToClipboard(id);
             }
+        }else if(actionType == ACTION_TYPE_ADD){
+            long time = intent.getLongExtra(EXTRA_CLIP_TIME,System.currentTimeMillis());
+            String clip = intent.getStringExtra(EXTRA_CLIP);
+            addAndUpdateNewClip(clip,time);
+        }
+    }
+
+    private void addAndUpdateNewClip(String clip, long time) {
+        if(mClipManager!=null){
+            Clipping clipping = new Clipping(clip,time);
+            long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
+            if(id > 0) {
+                mClipManager.removePrimaryClipChangedListener(mClipListener);
+                mClipManager.setPrimaryClip(clipping.toClipData());
+                mClipManager.addPrimaryClipChangedListener(mClipListener);
+                sendNotification(clip);
+                updateWidgets();
+            }
+
         }
     }
 
@@ -153,7 +175,17 @@ public class ClipListenerService extends Service {
         intent.putExtra(ClipListenerService.EXTRA_CLIPPING_ID,clip.getId());
         return intent;
     }
+    public static Intent getAddNewClipIntent(Context context, String clip, long time){
+        Intent intent = new Intent(context, ClipListenerService.class);
+        intent.putExtra(ClipListenerService.EXTRA_ACTION_TYPE,ClipListenerService.ACTION_TYPE_ADD);
+        intent.putExtra(ClipListenerService.EXTRA_CLIP,clip);
+        intent.putExtra(ClipListenerService.EXTRA_CLIP_TIME,time);
+        return intent;
+    }
+    public static void addNewClip(Context context, String clip, long time){
+        context.startService(getAddNewClipIntent(context,clip,time));
 
+    }
     public static void swapClipping(Context context, Clipping clipData) {
         context.startService(getSwapClippingIntent(context,clipData));
     }
