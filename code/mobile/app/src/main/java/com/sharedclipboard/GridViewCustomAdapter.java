@@ -96,7 +96,7 @@ public class GridViewCustomAdapter extends ArrayAdapter
             }
         });
 
-        textViewTitle.setText(""+list.get(position).getDate());
+        textViewTitle.setText(""+getDurationString(list.get(position).getDate()));
 //            if(position%2==0)
 //            {
 //                textViewTitle.setText("3 mins ago");
@@ -107,6 +107,22 @@ public class GridViewCustomAdapter extends ArrayAdapter
 //            }
         return row;
 
+    }
+    private String getDurationString(long time) {
+        //Log.e("VVV", "getDurationString = " + seconds);
+        long seconds = (System.currentTimeMillis() - time) / 1000;
+        long hours = seconds / 3600;
+        long mins = (seconds / 60) - (hours * 60);
+        long sec = seconds - ((hours * 3600) + (mins * 60));
+        StringBuilder sb = new StringBuilder();
+        if (hours > 0) {
+            sb.append(hours + " hours ago" );
+        } else if (mins > 0) {
+            sb.append(mins + " mins ago" );
+        } else {
+            sb.append(sec + " secs ago" );
+        }
+        return sb.toString();
     }
 
 }
