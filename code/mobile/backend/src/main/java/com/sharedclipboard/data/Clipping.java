@@ -24,7 +24,7 @@ public class Clipping implements Comparable<Clipping> {
         long millis = time * 1000;
         Date date = new Date(millis);
         SimpleDateFormat sdf = new SimpleDateFormat("M/d/y K:m a", Locale.ENGLISH);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
         String formattedDate = sdf.format(date);
         return formattedDate;
     }
