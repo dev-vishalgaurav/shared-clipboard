@@ -3,7 +3,7 @@
     android:layout_width="210dp"
     android:layout_height="180dp"
     android:orientation="vertical"
-    android:background="@drawable/sticky_pinned_yellow">
+    android:background="@drawable/blue_sticky">
     <!--android:padding="5dp"-->
 
     <LinearLayout
@@ -14,8 +14,8 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="150dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="25dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_height="wrap_content"
@@ -30,8 +30,8 @@
         android:paddingTop="20dp"
         android:layout_marginTop="5dp"
 
-        android:layout_width="50dp"
-        android:layout_height="50dp">
+        android:layout_width="40dp"
+        android:layout_height="40dp">
 
     <!--android:src="@drawable/ic_launcher" -->
         <!--android:layout_marginRight="10dp">-->
@@ -42,8 +42,8 @@
     <TextView
         android:id="@+id/textViewInfo"
         android:layout_width="210dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="35dp"
+        android:paddingRight="30dp"
         android:layout_height="120dp"
         android:textSize="15sp" >
     </TextView>
