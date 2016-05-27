@@ -27,7 +27,7 @@ public class GridViewCustomAdapter extends ArrayAdapter
     List<Clipping> list;
 
     final CharSequence[] items = {
-            "Edit", "Delete", "Export"
+            "View","Edit", "Delete", "Export"
     };
 
     public Clipping getClipping(int position){
@@ -79,15 +79,18 @@ public class GridViewCustomAdapter extends ArrayAdapter
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         // Do something with the selection
-                        if(item==1) {
+                        if(item==2) {
                             SharedClipperApp.getDb(context).deleteClipping(list.get(position).getId());
                             MainActivity.gridViewCustomeAdapter = new GridViewCustomAdapter(context);
                             // Set the Adapter to GridView
                             MainActivity.gridView.setAdapter(MainActivity.gridViewCustomeAdapter);
-                        }else if(item == 0){ // Edit
+                        }else if(item == 1){ // Edit
                             Intent intent = new Intent(context, EditClipping.class);
                             intent.putExtra(EditClipping.EXTRA_CLIPPING_ID,list.get(position).getId());
                             context.startActivity(intent);
+                        }else if(item == 0){ //
+                            Clipping clip = list.get(position);
+                            ((MainActivity)context).showAlertDialog(clip.getDurationString(),clip.getClipping(),false);
                         }
                     }
                 });

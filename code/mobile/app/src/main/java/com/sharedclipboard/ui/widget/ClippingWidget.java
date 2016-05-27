@@ -45,7 +45,8 @@ public class ClippingWidget extends AppWidgetProvider {
         for (int i = 0 ; (i < clippings.size() && i < 4 ) ; i++){
             Clipping clip = clippings.get(i);
             Log.e("VVV","date = " + clip.getDate());
-            views.setTextViewText(textViews[i],clip.getClipping());
+            String text = clip.getDurationString() + "\n\n" + clip.getClipping();
+            views.setTextViewText(textViews[i],text);
             views.setOnClickPendingIntent(textViews[i],getPendingIntent(context,clip));
         }
     }

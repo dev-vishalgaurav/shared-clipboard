@@ -59,7 +59,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param alertMessage the main message of the alert
      * @param isCancelable whether the dialog is cancelable
      */
-    protected void showAlertDialog(String title, String alertMessage, boolean isCancelable) {
+    public void showAlertDialog(String title, String alertMessage, boolean isCancelable) {
         if (mAlertDialog == null) {
             mAlertDialog = getNewAlertDialog();
         }

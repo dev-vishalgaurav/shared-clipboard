@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         gridView=(GridView)findViewById(R.id.gridViewCustom);
+        gridView.setEmptyView(findViewById(R.id.txtEmpty));
         // Create the Custom Adapter Object
         // Handling touch/click Event on GridView Item
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,6 +54,9 @@ public class MainActivity extends BaseActivity {
             }
         });
         initGCM();
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setIcon(R.drawable.sync_icon_burned);
+
     }
 
     @Override

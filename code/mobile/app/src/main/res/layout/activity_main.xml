@@ -41,5 +41,10 @@
         android:numColumns="2"
         android:stretchMode="columnWidth"
         android:gravity="center"/>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/txtEmpty"
+        android:text="No Clippings for, Start copying"
+        android:layout_height="match_parent" />
 </LinearLayout>
