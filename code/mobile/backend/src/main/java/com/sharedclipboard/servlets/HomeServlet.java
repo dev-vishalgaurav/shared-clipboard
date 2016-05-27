@@ -22,7 +22,7 @@ public class HomeServlet extends HttpServlet {
         if(valid != null && valid.equals("invalid"))
             writer.write("<h3>Invalid Web Id, Please try again</h3>");
 
-        writer.write("<form action=\"display.do\" method=\"post\">\n" +
+        writer.write("<form action=\"display.do\" method=\"get\">\n" +
                 "    Web Id:<br>\n" +
                 "    <input type=\"text\" name=\"id\">\n" +
                 "    <input type=\"submit\" value=\"Submit\">\n" +

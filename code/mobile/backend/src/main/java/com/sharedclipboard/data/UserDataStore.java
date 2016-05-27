@@ -34,7 +34,7 @@ public class UserDataStore {
         if(results.size() > 0)
             return "";
 
-        Entity entry = new Entity("User", username);
+        Entity entry = new Entity("User");
         entry.setProperty("username", username);
         entry.setProperty("password", password);
         String passcode = generateRandomPasscode();

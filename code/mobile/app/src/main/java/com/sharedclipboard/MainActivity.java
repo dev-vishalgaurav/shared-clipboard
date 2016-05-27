@@ -3,7 +3,6 @@ package com.sharedclipboard;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,10 +11,11 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.sharedclipboard.storage.db.models.Clipping;
+import com.sharedclipboard.ui.activity.BaseActivity;
 import com.sharedclipboard.ui.activity.SettingsActivity;
 
-public class MainActivity extends AppCompatActivity
-{
+
+public class MainActivity extends BaseActivity {
     public static GridView gridView;
     public static GridViewCustomAdapter gridViewCustomeAdapter;
 

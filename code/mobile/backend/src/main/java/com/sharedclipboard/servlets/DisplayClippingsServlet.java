@@ -30,9 +30,15 @@ public class DisplayClippingsServlet extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
         writer.write("<html>\n");
+        writer.write("<h2>Welcome To Your Clippings</h2>");
 
         writer.write(getTableHTML(id));
         writer.write("</html>");
+    }
+
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+        doPost(req, resp);
     }
 
     private String getTableHTML(String passcode) {
@@ -46,13 +52,13 @@ public class DisplayClippingsServlet extends HttpServlet {
         builder.append("<td style=\"border:1px solid black\">Date</td>");
         builder.append("<td style=\"border:1px solid black\">Text</td></tr>");
 
-        /*
+
         //loop over clippings
         for(Clipping clipping : clippings) {
             //create the HTML for the clipping row
             builder.append("<tr><td style=\"border:1px solid black\">" + clipping.getDateString() + "</td>");
             builder.append("<td style=\"border:1px solid black\">" + clipping.getText() + "</td></tr>");
-        }*/
+        }
 
         builder.append("</table>");
 

@@ -20,6 +20,19 @@ public class Clipping {
     private int clippingType;
     private long date;
 
+
+    /**
+     * initiate id as -1
+     * @param clipping
+     * @param date
+     */
+    public Clipping(String clipping, long date) {
+        this.id = -1l;
+        this.clipping = clipping;
+        this.clippingType = 1;
+        this.date = date;
+    }
+
     /**
      * initiate id as -1
      * @param clipping
