@@ -31,8 +31,7 @@ public class ClipListenerService extends Service {
     public static final String EXTRA_CLIP_TIME = "extra_clip_time";
     public static final int ACTION_TYPE_CLICK = 1;
     public static final int ACTION_TYPE_ADD = 2;
-
-
+    public static final int ACTION_TYPE_UPDATE_WIDGETS = 3;
 
     private ClipboardManager mClipManager = null;
 
@@ -65,6 +64,8 @@ public class ClipListenerService extends Service {
             long time = intent.getLongExtra(EXTRA_CLIP_TIME,System.currentTimeMillis());
             String clip = intent.getStringExtra(EXTRA_CLIP);
             addAndUpdateNewClip(clip,time);
+        }else if(actionType == ACTION_TYPE_UPDATE_WIDGETS){
+            updateWidgets();
         }
     }
 
@@ -177,6 +178,11 @@ public class ClipListenerService extends Service {
         intent.putExtra(ClipListenerService.EXTRA_CLIPPING_ID,clip.getId());
         return intent;
     }
+    public static Intent getUpdateWidgetsIntent(Context context){
+        Intent intent = new Intent(context, ClipListenerService.class);
+        intent.putExtra(ClipListenerService.EXTRA_ACTION_TYPE,ACTION_TYPE_UPDATE_WIDGETS);
+        return intent;
+    }
     public static Intent getAddNewClipIntent(Context context, String clip, long time){
         Intent intent = new Intent(context, ClipListenerService.class);
         intent.putExtra(ClipListenerService.EXTRA_ACTION_TYPE,ClipListenerService.ACTION_TYPE_ADD);
@@ -190,5 +196,9 @@ public class ClipListenerService extends Service {
     }
     public static void swapClipping(Context context, Clipping clipData) {
         context.startService(getSwapClippingIntent(context,clipData));
+    }
+    public static void updateWidgets(Context context) {
+
+        context.startService(getUpdateWidgetsIntent(context));
     }
 }

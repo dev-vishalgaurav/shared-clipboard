@@ -3,6 +3,7 @@ package com.sharedclipboard;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sharedclipboard.storage.db.models.Clipping;
+import com.sharedclipboard.ui.activity.EditClipping;
 
 import java.util.List;
 
@@ -48,7 +50,7 @@ public class GridViewCustomAdapter extends ArrayAdapter
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent)
+    public View getView(final int position, final View convertView, ViewGroup parent)
     {
         View row = convertView;
         Log.d("TAGG", "Came here");
@@ -83,7 +85,9 @@ public class GridViewCustomAdapter extends ArrayAdapter
                             // Set the Adapter to GridView
                             MainActivity.gridView.setAdapter(MainActivity.gridViewCustomeAdapter);
                         }else if(item == 0){ // Edit
-
+                            Intent intent = new Intent(context, EditClipping.class);
+                            intent.putExtra(EditClipping.EXTRA_CLIPPING_ID,list.get(position).getId());
+                            context.startActivity(intent);
                         }
                     }
                 });
