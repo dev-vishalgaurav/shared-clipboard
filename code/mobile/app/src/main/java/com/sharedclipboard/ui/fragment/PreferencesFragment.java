@@ -11,6 +11,10 @@ import com.sharedclipboard.storage.preferences.PreferenceUtils;
  */
 public class PreferencesFragment extends PreferenceFragment {
 
+    public PreferencesFragment(){
+        
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,5 +22,6 @@ public class PreferencesFragment extends PreferenceFragment {
         // Load the preferences from the preferences xml file
         addPreferencesFromResource(R.xml.preferences);
         findPreference("passcode").setTitle(PreferenceUtils.getString(getActivity(),"passcode","Unknown"));
+        findPreference(PreferenceUtils.PREF_EMAIL).setTitle(PreferenceUtils.getString(getActivity(),PreferenceUtils.PREF_EMAIL,"sample@sample.com"));
     }
 }

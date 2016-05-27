@@ -10,7 +10,14 @@
         </PreferenceScreen>
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Email">
+        <PreferenceScreen
+            android:title="sample@sample.com"
+            android:key="email">
+        </PreferenceScreen>
 
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Max Recorded Copies">

@@ -13,6 +13,7 @@ public class PreferenceUtils {
     public static final String PREF_REGISTRATION_COMPLETE = "reg_complete";
     public static final String PREF_SENT_TOKEN_TO_SERVER = "reg_sent_token";
     public static final String PREF_PASSCODE = "passcode";
+    public static final String PREF_EMAIL = "email";
     public static final String PREF_REGID = "reg_id";
 
 
