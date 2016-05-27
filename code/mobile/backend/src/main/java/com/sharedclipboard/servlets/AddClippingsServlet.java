@@ -33,7 +33,7 @@ public class AddClippingsServlet extends HttpServlet {
         //if input type is desktop, forward the info to the devices
         if(inputType.equals("desktop")) {
             MessagingEndpoint messagingEndpoint = new MessagingEndpoint();
-            String message = Long.toString(time) + "_" + text;
+            String message = Long.toString(time * 1000) + "_" + text;
             messagingEndpoint.sendMessage(message, passcode);
         }
     }
