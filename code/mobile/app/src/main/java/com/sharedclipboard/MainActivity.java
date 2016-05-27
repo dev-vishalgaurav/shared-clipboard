@@ -52,6 +52,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+        initGCM();
     }
 
     @Override
