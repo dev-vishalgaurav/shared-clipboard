@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sharedclipboard.HomeActivity;
+import com.sharedclipboard.MainActivity;
 import com.sharedclipboard.R;
 import com.sharedclipboard.network.NetworkUtils;
 import com.sharedclipboard.storage.preferences.PreferenceUtils;
@@ -81,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(PreferenceUtils.getString(getBaseContext(),PreferenceUtils.PREF_PASSCODE,null) != null){
-            startActivity(new Intent(getBaseContext(),HomeActivity.class));
+            startActivity(new Intent(getBaseContext(),MainActivity.class));
             finish();
         }else {
             setContentView(R.layout.activity_login);
@@ -402,7 +403,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {

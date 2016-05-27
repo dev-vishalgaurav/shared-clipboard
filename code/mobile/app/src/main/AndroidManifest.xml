@@ -11,11 +11,11 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.sharedclipboard.permission.C2D_MESSAGE" />
 
-    <permission android:name="com.sharedclipboard.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.sharedclipboard.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <application
@@ -28,11 +28,12 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.SettingsActivity"
             android:configChanges="orientation|screenSize"
@@ -54,6 +55,7 @@
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -86,6 +88,7 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.sharedclipboard" />
             </intent-filter>
             <intent-filter>
@@ -100,14 +103,27 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-
+        <activity
+            android:name=".ui.activity.EditClipping"
+            android:label="@string/title_activity_edit_clipping"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sharedclipboard.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -28,6 +28,10 @@ public class GridViewCustomAdapter extends ArrayAdapter
             "Edit", "Delete", "Export"
     };
 
+    public Clipping getClipping(int position){
+        return list.get(position);
+    }
+
     public GridViewCustomAdapter(Context context)
     {
         super(context, 0);
@@ -73,12 +77,14 @@ public class GridViewCustomAdapter extends ArrayAdapter
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         // Do something with the selection
-                        if(item==1)
+                        if(item==1) {
                             SharedClipperApp.getDb(context).deleteClipping(list.get(position).getId());
+                            MainActivity.gridViewCustomeAdapter = new GridViewCustomAdapter(context);
+                            // Set the Adapter to GridView
+                            MainActivity.gridView.setAdapter(MainActivity.gridViewCustomeAdapter);
+                        }else if(item == 0){ // Edit
 
-                        MainActivity.gridViewCustomeAdapter = new GridViewCustomAdapter(context);
-                        // Set the Adapter to GridView
-                        MainActivity.gridView.setAdapter(MainActivity.gridViewCustomeAdapter);
+                        }
                     }
                 });
                 AlertDialog alert = builder.create();

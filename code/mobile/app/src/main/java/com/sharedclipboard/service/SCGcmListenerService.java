@@ -29,14 +29,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.sharedclipboard.HomeActivity;
+import com.sharedclipboard.MainActivity;
 import com.sharedclipboard.R;
-import com.sharedclipboard.SharedClipperApp;
-import com.sharedclipboard.storage.db.models.Clipping;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class SCGcmListenerService extends GcmListenerService {
 
@@ -100,7 +95,7 @@ public class SCGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

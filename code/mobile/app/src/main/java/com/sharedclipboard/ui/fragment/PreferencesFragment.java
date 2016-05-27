@@ -12,7 +12,7 @@ import com.sharedclipboard.storage.preferences.PreferenceUtils;
 public class PreferencesFragment extends PreferenceFragment {
 
     public PreferencesFragment(){
-        
+
     }
 
     @Override
