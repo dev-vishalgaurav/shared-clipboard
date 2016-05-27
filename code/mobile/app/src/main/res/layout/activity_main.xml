@@ -46,6 +46,9 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:id="@+id/txtEmpty"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        android:textColor="@android:color/white"
         android:text="No Clippings for, Start copying"
         android:layout_height="match_parent" />
 </LinearLayout>
