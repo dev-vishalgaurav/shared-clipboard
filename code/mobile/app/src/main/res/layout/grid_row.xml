@@ -3,7 +3,7 @@
     android:layout_width="210dp"
     android:layout_height="180dp"
     android:orientation="vertical"
-    android:background="@drawable/blue_sticky">
+    android:background="@drawable/blue_sticky_burned">
     <!--android:padding="5dp"-->
 
     <LinearLayout
