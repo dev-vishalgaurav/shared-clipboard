@@ -34,6 +34,7 @@ public class ClipListenerService extends Service {
     public static final int ACTION_TYPE_UPDATE_WIDGETS = 3;
 
     private ClipboardManager mClipManager = null;
+    private Clipping previousClip = null;
 
     @Override
     public void onCreate() {
@@ -134,12 +135,15 @@ public class ClipListenerService extends Service {
                 ClipData.Item item  = clip.getItemAt(0);
                 if(item!=null && item.getText() != null) {
                     Clipping clipping = new Clipping(item.getText().toString(),1, System.currentTimeMillis());
-                    long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
-                    Log.e("VVV", "Clipping insert ID = " + id);
-                    sendNotification(item.getText().toString());
-                    updateWidgets();
-                    ClippingUploadAsyncTask uploadAsyncTask = new ClippingUploadAsyncTask(getBaseContext());
-                    uploadAsyncTask.execute(item.getText().toString());
+                    if(previousClip == null || (!previousClip.getClipping().equals(clipping.getClipping()))) {
+                        previousClip = clipping;
+                        long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
+                        Log.e("VVV", "Clipping insert ID = " + id);
+                        sendNotification(item.getText().toString());
+                        updateWidgets();
+                        ClippingUploadAsyncTask uploadAsyncTask = new ClippingUploadAsyncTask(getBaseContext());
+                        uploadAsyncTask.execute(item.getText().toString());
+                    }
                 }
             }
         }
