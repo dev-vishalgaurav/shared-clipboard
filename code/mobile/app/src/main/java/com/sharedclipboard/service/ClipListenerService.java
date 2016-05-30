@@ -134,7 +134,8 @@ public class ClipListenerService extends Service {
             if(clip.getItemCount() > 0) {
                 ClipData.Item item  = clip.getItemAt(0);
                 if(item!=null && item.getText() != null) {
-                    Clipping clipping = new Clipping(item.getText().toString(),1, System.currentTimeMillis());
+                    Long time = System.currentTimeMillis();
+                    Clipping clipping = new Clipping(item.getText().toString(),1, time);
                     if(previousClip == null || (!previousClip.getClipping().equals(clipping.getClipping()))) {
                         previousClip = clipping;
                         long id = SharedClipperApp.getDb(getBaseContext()).insertClipping(clipping);
@@ -142,7 +143,11 @@ public class ClipListenerService extends Service {
                         sendNotification(item.getText().toString());
                         updateWidgets();
                         ClippingUploadAsyncTask uploadAsyncTask = new ClippingUploadAsyncTask(getBaseContext());
-                        uploadAsyncTask.execute(item.getText().toString());
+                        String[] params = new String[2];
+                        params[0] = item.getText().toString();
+                        params[1] = Long.toString(time);
+                        uploadAsyncTask.execute(params);
+                        Log.d("prev time", params[1]);
                     }
                 }
             }

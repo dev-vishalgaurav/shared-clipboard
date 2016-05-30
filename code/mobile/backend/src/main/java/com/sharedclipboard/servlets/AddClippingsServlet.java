@@ -25,15 +25,21 @@ public class AddClippingsServlet extends HttpServlet {
         String passcode = req.getParameter("passcode");
         String inputType = req.getParameter("input_type");
         String text = req.getParameter("clipping");
+        String timeString = req.getParameter("time");
+        long timeLong;
 
-        long time = System.currentTimeMillis() / 1000;
-        Clipping clipping = new Clipping(time, text);
+        if(timeString == null) {
+            timeLong = System.currentTimeMillis();
+        } else {
+            timeLong = Long.parseLong(timeString);
+        }
+        Clipping clipping = new Clipping(timeLong, text);
         ClippingsDataStore.addClipping(clipping, passcode);
 
         //if input type is desktop, forward the info to the devices
         if(inputType.equals("desktop")) {
             MessagingEndpoint messagingEndpoint = new MessagingEndpoint();
-            String message = Long.toString(time * 1000) + "_" + text;
+            String message = Long.toString(timeLong) + "_" + text;
             messagingEndpoint.sendMessage(message, passcode);
         }
     }

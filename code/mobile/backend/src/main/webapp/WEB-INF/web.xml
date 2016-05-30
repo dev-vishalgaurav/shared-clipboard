@@ -72,6 +72,16 @@
         <url-pattern>/register.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>RefreshClippingsServlet</servlet-name>
+        <servlet-class>com.sharedclipboard.servlets.RefreshClippingsServlet</servlet-class>
+    </servlet>
+    <!-- map servlet to urls-->
+    <servlet-mapping>
+        <servlet-name>RefreshClippingsServlet</servlet-name>
+        <url-pattern>/refresh.do</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>home.do</welcome-file>
     </welcome-file-list>

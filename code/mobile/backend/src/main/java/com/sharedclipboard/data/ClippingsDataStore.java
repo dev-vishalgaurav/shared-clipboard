@@ -46,4 +46,5 @@ public class ClippingsDataStore {
 
         return retClippings;
     }
+
 }

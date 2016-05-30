@@ -30,7 +30,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sharedclipboard.HomeActivity;
 import com.sharedclipboard.MainActivity;
 import com.sharedclipboard.R;
 import com.sharedclipboard.network.NetworkUtils;
@@ -370,7 +369,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     PreferenceUtils.putString(getBaseContext(), "passcode", passcode);
                     PreferenceUtils.putString(getBaseContext(), PreferenceUtils.PREF_EMAIL, mEmail);
                     Log.d("Passcode", PreferenceUtils.getString(getBaseContext(), "passcode","null"));
-
                 }
 
                 // Get Response

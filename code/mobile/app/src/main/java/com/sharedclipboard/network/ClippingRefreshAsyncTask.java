@@ -1,9 +1,13 @@
 package com.sharedclipboard.network;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.sharedclipboard.MainActivity;
+import com.sharedclipboard.SharedClipperApp;
+import com.sharedclipboard.storage.db.models.Clipping;
 import com.sharedclipboard.storage.preferences.PreferenceUtils;
 
 import java.io.IOException;
@@ -11,21 +15,24 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 /**
- * Created by Girouard23 on 5/26/16.
+ * Created by Girouard23 on 5/30/16.
  */
-public class ClippingUploadAsyncTask extends AsyncTask<String, Integer, Double> {
+public class ClippingRefreshAsyncTask extends AsyncTask<String, Integer, Double> {
 
-    String endpoint = NetworkUtils.SERVER_URL + "/add.do";
     private Context mContext;
+    private MainActivity mainActivity;
 
-    public ClippingUploadAsyncTask (Context context){
-        mContext = context;
+    public ClippingRefreshAsyncTask (MainActivity m){
+        mContext = m.getBaseContext();
+        mainActivity = m;
     }
 
     @Override
     protected Double doInBackground(String... params) {
+        String endpoint = NetworkUtils.SERVER_URL + "/refresh.do";
         URL url;
         try {
             url = new URL(endpoint);
@@ -34,11 +41,18 @@ public class ClippingUploadAsyncTask extends AsyncTask<String, Integer, Double> 
             throw new IllegalArgumentException("invalid url: " + endpoint);
         }
 
+        StringBuilder stringBuilder =  new StringBuilder();
+        List<Clipping> clippings = Clipping.getAllClippings(SharedClipperApp.getDb(mContext).getClippingAll(true));
+        for(Clipping clipping : clippings) {
+            stringBuilder.append(Long.toString(clipping.getDate()));
+            stringBuilder.append(":");
+        }
+
         String passcode = PreferenceUtils.getString(mContext, "passcode","null");
-        String inputType = "phone";
-        String clipping = params[0];
-        String body = "passcode=" + passcode + "&input_type=" + inputType + "&clipping=" + clipping
-                + "&time=" + params[1];
+
+        String clippingsString = stringBuilder.toString();
+        String body = "clippings=" + clippingsString + "&passcode=" + passcode;
+        Log.d("body", body);
 
         byte[] bytes = body.getBytes();
         HttpURLConnection conn = null;
@@ -68,14 +82,12 @@ public class ClippingUploadAsyncTask extends AsyncTask<String, Integer, Double> 
             if (conn != null)
                 conn.disconnect();
         }
-
         return null;
     }
 
     protected void onPostExecute(Double result){
+        mainActivity.refreshGridView();
     }
     protected void onProgressUpdate(Integer... progress){
     }
-
-
 }
