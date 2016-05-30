@@ -1,19 +1,18 @@
 package com.sharedclipboard;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -25,7 +24,7 @@ import com.sharedclipboard.ui.activity.BaseActivity;
 import com.sharedclipboard.ui.activity.SettingsActivity;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -33,6 +32,7 @@ public class MainActivity extends BaseActivity {
     public static GridViewCustomAdapter gridViewCustomeAdapter;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private boolean isReceiverRegistered;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +57,8 @@ public class MainActivity extends BaseActivity {
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         //getSupportActionBar().setIcon(R.drawable.sync_icon_burned);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class MainActivity extends BaseActivity {
         unRegisterReceiver();
     }
     private void initGCM(){
-        Log.e("VVV","initGCM");
+        Log.e("VVV", "initGCM");
         boolean isRegistrationNeeded = PreferenceUtils.getBoolean(getBaseContext(),PreferenceUtils.PREF_SENT_TOKEN_TO_SERVER,false);
         if(!isRegistrationNeeded) {
             mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -98,6 +100,25 @@ public class MainActivity extends BaseActivity {
             }
         }
     }
+
+    /**
+     * This method is called when swipe refresh is pulled down
+     */
+    @Override
+    public void onRefresh() {
+        //onResume();
+        gridViewCustomeAdapter.notifyDataSetChanged();
+        mSwipeRefreshLayout.setRefreshing(false);
+        /*
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 2000);*/
+        Log.d("Refresh", "refresh");
+    }
+
     private void registerReceiver(){
         if(!isReceiverRegistered) {
             LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(PreferenceUtils.PREF_REGISTRATION_COMPLETE));
