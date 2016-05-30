@@ -1,12 +1,19 @@
 package com.sharedclipboard.ui.fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.sharedclipboard.R;
+import com.sharedclipboard.SharedClipperApp;
+import com.sharedclipboard.service.ClipListenerService;
 import com.sharedclipboard.storage.preferences.PreferenceUtils;
+import com.sharedclipboard.ui.activity.LoginActivity;
 import com.sharedclipboard.ui.activity.ScreenSlideActivity;
 
 /**
@@ -17,6 +24,7 @@ public class PreferencesFragment extends PreferenceFragment {
     public PreferencesFragment(){
 
     }
+    private AlertDialog mSaveDiscardDialog = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,5 +44,47 @@ public class PreferencesFragment extends PreferenceFragment {
                 return true;
             }
         });
+        findPreference("logout").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showSaveDiscardDialog();
+                return true;
+            }
+        });
+    }
+    private void initSaveDiscardDialog() {
+        Dialog.OnClickListener mOnDialogClickSaveDIscard = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case Dialog.BUTTON_POSITIVE: {
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("logout"));
+                        SharedClipperApp.getDb(getActivity()).resetDbValues();
+                        PreferenceUtils.putString(getActivity(),PreferenceUtils.PREF_EMAIL,null);
+                        PreferenceUtils.putString(getActivity(),PreferenceUtils.PREF_PASSCODE,null);
+                        getActivity().stopService(new Intent(getActivity(), ClipListenerService.class));
+                        getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                    }
+                    break;
+
+                    case Dialog.BUTTON_NEGATIVE: {
+                    }
+                    break;
+                }
+            }
+        };
+        if (mSaveDiscardDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Are you Sure ? ");
+            builder.setMessage("This action will logout from your session, This will not delete your account");
+            builder.setPositiveButton("Yes", mOnDialogClickSaveDIscard);
+            builder.setNegativeButton("No", mOnDialogClickSaveDIscard);
+            mSaveDiscardDialog = builder.create();
+        }
+    }
+    private void showSaveDiscardDialog() {
+        initSaveDiscardDialog();
+        mSaveDiscardDialog.show();
     }
 }

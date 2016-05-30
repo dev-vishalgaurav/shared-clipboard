@@ -31,7 +31,14 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     public static GridView gridView;
     public static GridViewCustomAdapter gridViewCustomeAdapter;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private BroadcastReceiver mLogoutReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
     private boolean isReceiverRegistered;
+    private boolean isLogoutReceiverRegistered;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -59,6 +66,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        registerLogoutReceiver();
     }
 
     @Override
@@ -119,6 +127,18 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         Log.d("Refresh", "refresh");
     }
 
+    private void registerLogoutReceiver(){
+        if(!isLogoutReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter("logout"));
+            isLogoutReceiverRegistered = true;
+        }
+    }
+    private void unRegisterLogoutReceiver(){
+        if(isLogoutReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mLogoutReceiver);
+            isLogoutReceiverRegistered = false;
+        }
+    }
     private void registerReceiver(){
         if(!isReceiverRegistered) {
             LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(PreferenceUtils.PREF_REGISTRATION_COMPLETE));
@@ -174,5 +194,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        unRegisterLogoutReceiver();
+    }
 }

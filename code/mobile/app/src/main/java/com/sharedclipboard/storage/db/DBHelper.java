@@ -111,5 +111,10 @@ public class DBHelper extends SQLiteOpenHelper {
         String orderBy = ClippingContract.ClippingsTable.COLUMN_DATE_TIME + (isDateLatest ?  " DESC" : " ASC" );
         return query(ClippingContract.ClippingsTable.TABLE.getTableName(), null, null, null, null, null, orderBy);
     }
+    public void resetDbValues(){
+        for (DBTable table : DBConstants.DB_TABLES){
+            delete(table.getTableName(),null,null);
+        }
+    }
 
 }
