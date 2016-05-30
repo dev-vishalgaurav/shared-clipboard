@@ -15,6 +15,10 @@
     <string name="no_clippings">No Clippings</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="action_previous">Previous</string>
+    <string name="action_next">Next</string>
+    <string name="action_finish">Finish</string>
+    <string name="title_template_step">nothng </string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>

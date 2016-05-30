@@ -54,5 +54,19 @@
         </PreferenceScreen>
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Help">
+        <PreferenceScreen
+            android:title="Click here to launch Help !!"
+            android:key="help">
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="About us">
+        <PreferenceScreen
+            android:title="Click here to launch our web page"
+            android:key="about">
+        </PreferenceScreen>
+    </PreferenceCategory>
 
 </PreferenceScreen>
