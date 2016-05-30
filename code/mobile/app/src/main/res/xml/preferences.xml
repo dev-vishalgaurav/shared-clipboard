@@ -49,10 +49,25 @@
             android:summary="Disable the recording of copies" />
 
         <PreferenceScreen
-            android:title="Delete Your Account"
-            android:summary="Deletes account info from phone">
+            android:title="Logout"
+            android:key="logout"
+            android:summary="Log out from you current session. Your account will not be deleted">
         </PreferenceScreen>
 
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Help">
+        <PreferenceScreen
+            android:title="Click here to launch Help !!"
+            android:key="help">
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="About us">
+        <PreferenceScreen
+            android:title="Click here to launch our web page"
+            android:key="about">
+        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>
