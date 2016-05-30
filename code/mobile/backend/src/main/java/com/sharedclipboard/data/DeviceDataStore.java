@@ -4,6 +4,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.sharedclipboard.RegistrationRecord;
 
@@ -56,5 +57,20 @@ public class DeviceDataStore {
         }
 
         return retList;
+    }
+
+    public static void deleteRegistrationRecord(RegistrationRecord passedRecord, String passcode) {
+        Query.Filter propertyFilter = new Query.FilterPredicate("passcode", Query.FilterOperator.EQUAL, passcode);
+        Query q = new Query("Device").setFilter(propertyFilter);
+
+        List<Entity> results = dataStore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+        for(Entity entity : results) {
+            String deviceKey = (String) entity.getProperty("deviceKey");
+            if(passedRecord.getRegId().equals(deviceKey)) {
+                Key key = entity.getKey();
+                dataStore.delete(key);
+                return;
+            }
+        }
     }
 }

@@ -20,8 +20,6 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import static com.sharedclipboard.OfyService.ofy;
-
 /**
  * An endpoint to send messages to devices registered with the backend
  *
@@ -74,7 +72,7 @@ public class MessagingEndpoint {
                     // if the regId changed, we have to update the datastore
                     log.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
                     record.setRegId(canonicalRegId);
-                    ofy().save().entity(record).now();
+                    //ofy().save().entity(record).now();
                 }
             } else {
                 String error = result.getErrorCodeName();
@@ -82,7 +80,8 @@ public class MessagingEndpoint {
                     log.warning("Registration Id " + record.getRegId() + " no longer registered with GCM, removing from datastore");
                     // if the device is no longer registered with Gcm, remove it from the datastore
                     try {
-                        ofy().delete().entity(record).now();
+                        DeviceDataStore.deleteRegistrationRecord(record, passcode);
+                        //ofy().delete().entity(record).now();
                     } catch(Exception e) {}
                 }
                 else {
