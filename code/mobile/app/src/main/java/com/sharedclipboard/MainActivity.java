@@ -82,6 +82,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setRefreshing(true);
+        onRefresh();
         registerLogoutReceiver();
     }
 
