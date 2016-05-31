@@ -67,8 +67,6 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         initGCM();
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         //getSupportActionBar().setIcon(R.drawable.sync_icon_burned);
-        ClippingRefreshAsyncTask refreshAsyncTask = new ClippingRefreshAsyncTask(this);
-        refreshAsyncTask.execute("");
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);

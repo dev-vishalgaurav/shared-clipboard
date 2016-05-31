@@ -68,7 +68,7 @@ public final class SharedClipboardManager implements ClipboardOwner {
     }
 
     void accessAndProcessClip() {
-        Transferable contents = sysClip.getContents(this); // EXCEPTION
+        final Transferable contents = sysClip.getContents(this); // EXCEPTION
         new Thread(){
             @Override
             public void run(){
