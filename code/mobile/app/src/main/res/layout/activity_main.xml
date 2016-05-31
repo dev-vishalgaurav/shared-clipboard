@@ -58,7 +58,7 @@
         android:textSize="24sp"
         android:textStyle="bold|italic"
         android:textColor="@android:color/white"
-        android:text="No Clippings yet, Start copying"
+        android:text="No clippings yet. Start copying!"
         android:layout_height="match_parent" />
 </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
