@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -44,6 +43,19 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private boolean isLogoutReceiverRegistered;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private BroadcastReceiver mDataRefreshReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //gridViewCustomeAdapter.notifyDataSetChanged();
+            gridViewCustomeAdapter = new GridViewCustomAdapter(MainActivity.this);
+            // Set the Adapter to GridView
+            gridView.setAdapter(gridViewCustomeAdapter);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    };
+    private boolean isDataRefreshRegistered;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -80,12 +92,14 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         // Set the Adapter to GridView
         gridView.setAdapter(gridViewCustomeAdapter);
         registerReceiver();
+        registerDataReceiver();
     }
 
     @Override
     protected void onPause(){
         super.onPause();
         unRegisterReceiver();
+        unRegisterDataReceiver();
     }
     private void initGCM(){
         Log.e("VVV", "initGCM");
@@ -122,17 +136,6 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         ClippingRefreshAsyncTask refreshAsyncTask = new ClippingRefreshAsyncTask(this);
         refreshAsyncTask.execute("");
         final Activity a = this;
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //gridViewCustomeAdapter.notifyDataSetChanged();
-                gridViewCustomeAdapter = new GridViewCustomAdapter(a);
-                // Set the Adapter to GridView
-                gridView.setAdapter(gridViewCustomeAdapter);
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }, 5000);
         Log.d("Refresh", "refresh");
     }
 
@@ -166,6 +169,18 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         if(isReceiverRegistered) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
             isReceiverRegistered = false;
+        }
+    }
+    private void registerDataReceiver(){
+        if(!isDataRefreshRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(mDataRefreshReceiver, new IntentFilter("refresh"));
+            isDataRefreshRegistered = true;
+        }
+    }
+    private void unRegisterDataReceiver(){
+        if(isDataRefreshRegistered) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mDataRefreshReceiver);
+            isDataRefreshRegistered = false;
         }
     }
     /**

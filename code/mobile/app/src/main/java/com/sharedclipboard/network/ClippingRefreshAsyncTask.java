@@ -3,6 +3,7 @@ package com.sharedclipboard.network;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.sharedclipboard.MainActivity;
@@ -75,6 +76,8 @@ public class ClippingRefreshAsyncTask extends AsyncTask<String, Integer, Double>
             if (status != 200) {
                 throw new IOException("Post failed with error code " + status);
             }
+
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent("refresh"));
 
         } catch(Exception e) {
             e.printStackTrace();
