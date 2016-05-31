@@ -38,6 +38,7 @@ public class Client extends javax.swing.JFrame implements Runnable {
                 if(jCheckBox1.isSelected()){
                     Thread.sleep(1000);
                     String updatedClipping = requestUpdatedClipping();
+                    mClipboardManager.setClipboardContents(updatedClipping);
                     latestPhoneClipping.setText(updatedClipping);
                 }
             } catch (InterruptedException e) {
@@ -140,7 +141,7 @@ public class Client extends javax.swing.JFrame implements Runnable {
         jLabel4.setFont(new java.awt.Font("Tahoma", 2, 13)); // NOI18N
         jLabel4.setText("Copyright : Team SharedClipboard");
 
-        jCheckBox1.setText("Receive updates from phone");
+        jCheckBox1.setText("Sync back from phone");
 
         latestPhoneClipping.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         latestPhoneClipping.setText("jLabel5");
@@ -161,21 +162,21 @@ public class Client extends javax.swing.JFrame implements Runnable {
                         .addGap(170, 170, 170))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(130, 130, 130))))
+                        .addGap(130, 130, 130))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jCheckBox1)
+                        .addGap(153, 153, 153))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(64, 64, 64)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtPasscode, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEnter, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(txtPasscode, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEnter, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(203, 203, 203)
+                        .addGap(214, 214, 214)
                         .addComponent(latestPhoneClipping)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -193,9 +194,9 @@ public class Client extends javax.swing.JFrame implements Runnable {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(latestPhoneClipping)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addContainerGap())
         );
