@@ -19,7 +19,6 @@ package com.sharedclipboard.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
@@ -130,6 +129,10 @@ public class ScreenSlideActivity extends BaseActivity {
                 }else {
                     mPager.setCurrentItem(mPager.getCurrentItem() + 1);
                 }
+                return true;
+            case R.id.action_skip:
+                if(!getIntent().getBooleanExtra(EXTRA_IS_SETTINGS_LAUNCH,false))
+                    startActivity(new Intent(getBaseContext(),LoginActivity.class));
                 return true;
 
         }

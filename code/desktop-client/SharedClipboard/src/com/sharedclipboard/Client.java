@@ -35,9 +35,11 @@ public class Client extends javax.swing.JFrame implements Runnable {
     public void run() {
         while(true) {
             try {
-                Thread.sleep(1000);
-                String updatedClipping = requestUpdatedClipping();
-                latestPhoneClipping.setText(updatedClipping);
+                if(jCheckBox1.isSelected()){
+                    Thread.sleep(1000);
+                    String updatedClipping = requestUpdatedClipping();
+                    latestPhoneClipping.setText(updatedClipping);
+                }
             } catch (InterruptedException e) {
                 break;
             }
@@ -216,7 +218,8 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private void stopListening(){
         if(mClipboardManager!=null){
             mClipboardManager.stopListening();
-            t.interrupt();
+            if(t!=null)
+                t.interrupt();
             latestPhoneClipping.setText("");
             btnEnter.setText("Start");
             mClipboardManager = null;
@@ -236,11 +239,8 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private void startListening(){
         String passcode = txtPasscode.getText();
         if(passcode != null && passcode.length() > 0 ){
-            if(jCheckBox1.isSelected()) {
-                t = new Thread(this);
-                t.start();
-            }
-            
+            t = new Thread(this);
+            t.start();            
             mClipboardManager = new SharedClipboardManager(passcode);
             mClipboardManager.startListening();
             btnEnter.setText("Stop");
