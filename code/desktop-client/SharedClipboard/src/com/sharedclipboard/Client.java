@@ -5,17 +5,81 @@
  */
 package com.sharedclipboard;
 
+import static com.sharedclipboard.SharedClipboardManager.SERVER_URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author visha
  */
-public class Client extends javax.swing.JFrame {
+public class Client extends javax.swing.JFrame implements Runnable {
     private SharedClipboardManager mClipboardManager;
+    
+    public Thread t;
     /**
      * Creates new form Client
      */
     public Client() {
         initComponents();
+        latestPhoneClipping.setText("");
+    }
+    
+     @Override
+    public void run() {
+        while(true) {
+            try {
+                Thread.sleep(1000);
+                String updatedClipping = requestUpdatedClipping();
+                latestPhoneClipping.setText(updatedClipping);
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
+    }
+    
+    public String requestUpdatedClipping() {
+        try {
+            URL url = new URL(SERVER_URL + "latest.do");
+            String body = "passcode=" + txtPasscode.getText();
+            byte[] bytes = body.getBytes();
+            HttpURLConnection conn = null;
+            
+            conn = (HttpURLConnection) url.openConnection();
+            // optional default is GET
+            conn.setDoOutput(true);
+            conn.setUseCaches(false);
+            conn.setFixedLengthStreamingMode(bytes.length);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type",
+                    "application/x-www-form-urlencoded;charset=UTF-8");
+            // post the request
+            OutputStream out = conn.getOutputStream();
+            out.write(bytes);
+            out.close();
+            
+            int responseCode = conn.getResponseCode();
+            if(responseCode == 200) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line+"\n");
+                }
+                br.close();
+                return sb.toString();
+            }
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "";
     }
 
     /**
@@ -33,6 +97,8 @@ public class Client extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        latestPhoneClipping = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 0, 51));
@@ -72,18 +138,16 @@ public class Client extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 2, 13)); // NOI18N
         jLabel4.setText("Copyright : Team SharedClipboard");
 
+        jCheckBox1.setText("Receive updates from phone");
+
+        latestPhoneClipping.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        latestPhoneClipping.setText("jLabel5");
+        latestPhoneClipping.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPasscode, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEnter, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(56, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,6 +160,22 @@ public class Client extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(130, 130, 130))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtPasscode, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEnter, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(203, 203, 203)
+                        .addComponent(latestPhoneClipping)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,7 +189,11 @@ public class Client extends javax.swing.JFrame {
                     .addComponent(txtPasscode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEnter)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox1)
+                .addGap(18, 18, 18)
+                .addComponent(latestPhoneClipping)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addContainerGap())
         );
@@ -132,11 +216,14 @@ public class Client extends javax.swing.JFrame {
     private void stopListening(){
         if(mClipboardManager!=null){
             mClipboardManager.stopListening();
+            t.interrupt();
+            latestPhoneClipping.setText("");
             btnEnter.setText("Start");
             mClipboardManager = null;
             txtPasscode.setEnabled(true);
         }
     }
+    
     private void toggleListener(){
         if(mClipboardManager!= null){
            stopListening();
@@ -149,6 +236,11 @@ public class Client extends javax.swing.JFrame {
     private void startListening(){
         String passcode = txtPasscode.getText();
         if(passcode != null && passcode.length() > 0 ){
+            if(jCheckBox1.isSelected()) {
+                t = new Thread(this);
+                t.start();
+            }
+            
             mClipboardManager = new SharedClipboardManager(passcode);
             mClipboardManager.startListening();
             btnEnter.setText("Stop");
@@ -194,10 +286,12 @@ public class Client extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnter;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel latestPhoneClipping;
     private javax.swing.JTextField txtPasscode;
     // End of variables declaration//GEN-END:variables
 }

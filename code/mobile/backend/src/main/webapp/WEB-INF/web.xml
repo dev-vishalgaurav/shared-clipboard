@@ -82,6 +82,16 @@
         <url-pattern>/refresh.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>LatestClippingServlet</servlet-name>
+        <servlet-class>com.sharedclipboard.servlets.LatestClippingServlet</servlet-class>
+    </servlet>
+    <!-- map servlet to urls-->
+    <servlet-mapping>
+        <servlet-name>LatestClippingServlet</servlet-name>
+        <url-pattern>/latest.do</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>home.do</welcome-file>
     </welcome-file-list>

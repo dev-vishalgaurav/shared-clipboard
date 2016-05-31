@@ -47,4 +47,12 @@ public class ClippingsDataStore {
         return retClippings;
     }
 
+    public static Clipping getLatestClipping(String passcode) {
+        ArrayList<Clipping> allClippings = getAllClippingsWithPasscode(passcode);
+        if(allClippings.size() > 0)
+            return allClippings.get(0);
+
+        return null;
+    }
+
 }
