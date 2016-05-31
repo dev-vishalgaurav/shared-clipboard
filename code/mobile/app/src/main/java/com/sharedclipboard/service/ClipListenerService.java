@@ -13,6 +13,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -118,7 +119,8 @@ public class ClipListenerService extends Service {
     @Override
     public void onDestroy(){
         Log.e("VVV","onDestroy");
-        ClipListenerService.start(getBaseContext());
+        mClipManager.removePrimaryClipChangedListener(mClipListener);
+        //ClipListenerService.start(getBaseContext());
     }
 
     public static void start(Context context){
@@ -156,6 +158,7 @@ public class ClipListenerService extends Service {
 
     private void updateWidgets() {
         Log.e("VVV","ClipListenerService :- updateWidgets");
+        LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(new Intent("refresh"));
         Intent intent = new Intent(this,ClippingWidget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), ClippingWidget.class));

@@ -27,7 +27,7 @@ public class GridViewCustomAdapter extends ArrayAdapter
     List<Clipping> list;
 
     final CharSequence[] items = {
-            "View","Edit", "Delete", "Export"
+            "View","Edit", "Delete"
     };
 
     public Clipping getClipping(int position){

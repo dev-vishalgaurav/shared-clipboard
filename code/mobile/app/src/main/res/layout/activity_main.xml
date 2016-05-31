@@ -26,12 +26,8 @@
 
 <!--</LinearLayout>-->
 
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipe_refresh_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -40,6 +36,10 @@
     tools:context=".MainActivity">
 
 
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridViewCustom"
         android:layout_width="match_parent"
@@ -49,6 +49,7 @@
         android:stretchMode="columnWidth"
         android:gravity="center"/>
 
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <TextView
@@ -58,7 +59,6 @@
         android:textSize="24sp"
         android:textStyle="bold|italic"
         android:textColor="@android:color/white"
-        android:text="No Clippings yet, Start copying"
+        android:text="No clippings yet. Start copying!"
         android:layout_height="match_parent" />
-</LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>
