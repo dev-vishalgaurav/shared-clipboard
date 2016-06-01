@@ -3,8 +3,8 @@ This application aims to provide a platform that makes it easy to transfer text 
 
 Steps to use the application and Installation instructions:
 
-Download the Desktop client from the website http://vm285051.wix.com/clipboard and double click on the .jar file to start the client.
-Download the APK and install the application on the phone. Once you log in, go to settings, and obtain the passcode.
-Now type the passcode in the desktop client to start the session.
+1. Download the Desktop client from the website http://vm285051.wix.com/clipboard and double click on the .jar file to start the client.
+2. Download the APK and install the application on the phone. Once you log in, go to settings, and obtain the passcode.
+3. Now type the passcode in the desktop client to start the session.
 
-**Make sure both the desktop and the mobile has a working internet connection.
+Note :- Make sure both the desktop and the mobile has a working internet connection.
