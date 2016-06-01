@@ -20,33 +20,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Max Recorded Copies">
-
-        <ListPreference
-            android:key="text_clippings_max"
-            android:title="Text Clippings Max"
-            android:summary="Select the max number of clippings you want to keep."
-            android:entries="@array/max_strings"
-            android:entryValues="@array/max_values"
-            android:dialogTitle="Text Clippings Max" />
-
-        <ListPreference
-            android:key="image_clippings_max"
-            android:title="Image Clippings Max"
-            android:summary="Select the max number of clippings you want to keep."
-            android:entries="@array/max_strings"
-            android:entryValues="@array/max_values"
-            android:dialogTitle="Image Clippings Max" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="Account Settings">
-
-        <CheckBoxPreference
-            android:key="disable_clipboard"
-            android:title="Disable Clipboard Recordings"
-            android:summary="Disable keeping track of clippings." />
 
         <PreferenceScreen
             android:title="Logout"
