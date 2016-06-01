@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -51,7 +52,21 @@ public class PreferencesFragment extends PreferenceFragment {
                 return true;
             }
         });
+        findPreference("about").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse("http://vm285051.wix.com/clipboard");
+                intent.setData(uri);
+                try {
+                    startActivity(Intent.createChooser(intent,"Open project URL !"));
+                }catch (Exception ex){
+                }
+                return true;
+            }
+        });
     }
+
     private void initSaveDiscardDialog() {
         Dialog.OnClickListener mOnDialogClickSaveDIscard = new DialogInterface.OnClickListener() {
             @Override
