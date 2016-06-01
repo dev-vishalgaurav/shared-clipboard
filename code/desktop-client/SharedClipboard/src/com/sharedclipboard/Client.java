@@ -6,6 +6,7 @@
 package com.sharedclipboard;
 
 import static com.sharedclipboard.SharedClipboardManager.SERVER_URL;
+import java.awt.event.ItemEvent;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -19,10 +20,11 @@ import java.util.Map;
  *
  * @author visha
  */
-public class Client extends javax.swing.JFrame implements Runnable {
+public class Client extends javax.swing.JFrame {
     private SharedClipboardManager mClipboardManager;
     
     public Thread t;
+    public static boolean isSelected = false;
     /**
      * Creates new form Client
      */
@@ -30,22 +32,30 @@ public class Client extends javax.swing.JFrame implements Runnable {
         initComponents();
         latestPhoneClipping.setText("");
     }
-    
+    private Runnable backAndForth = new Runnable(){
      @Override
     public void run() {
+        System.out.println("Back and forth started");
         while(true) {
             try {
-                if(jCheckBox1.isSelected()){
+                //System.out.println("condition checking " + Client.isSelected);
+                if(Client.isSelected){
+                    System.out.println("requestUpdatedClipping");
                     Thread.sleep(1000);
                     String updatedClipping = requestUpdatedClipping();
+                    System.out.println("got clipping " + updatedClipping);
+                    String trimText = (updatedClipping.length() > 20) ? updatedClipping.substring(0, 20) + "..." : updatedClipping;
+                    latestPhoneClipping.setText(trimText);
                     mClipboardManager.setClipboardContents(updatedClipping);
-                    latestPhoneClipping.setText(updatedClipping);
                 }
             } catch (InterruptedException e) {
+                e.printStackTrace();
                 break;
-            }
+            }   
         }
+        System.out.println("Back and forth ended");
     }
+    };
     
     public String requestUpdatedClipping() {
         try {
@@ -142,6 +152,11 @@ public class Client extends javax.swing.JFrame implements Runnable {
         jLabel4.setText("Copyright : Team SharedClipboard");
 
         jCheckBox1.setText("Sync back from phone");
+        jCheckBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCheckBox1ItemStateChanged(evt);
+            }
+        });
 
         latestPhoneClipping.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         latestPhoneClipping.setText("jLabel5");
@@ -215,6 +230,20 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         stopListening();
     }//GEN-LAST:event_formWindowClosing
+
+    private void jCheckBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox1ItemStateChanged
+        // TODO add your handling code here:
+        if(evt.getStateChange() == ItemEvent.SELECTED) {//checkbox has been selected
+            //do something...
+            Client.isSelected = true;
+            System.out.println("selected");
+        } else {//checkbox has been deselected
+            //do something...
+            System.out.println("not selected");
+            Client.isSelected = false;
+        };
+        System.out.println("jCheckBox1ItemStateChanged");
+    }//GEN-LAST:event_jCheckBox1ItemStateChanged
     
     private void stopListening(){
         if(mClipboardManager!=null){
@@ -240,7 +269,7 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private void startListening(){
         String passcode = txtPasscode.getText();
         if(passcode != null && passcode.length() > 0 ){
-            t = new Thread(this);
+            t = new Thread(backAndForth);
             t.start();            
             mClipboardManager = new SharedClipboardManager(passcode);
             mClipboardManager.startListening();
