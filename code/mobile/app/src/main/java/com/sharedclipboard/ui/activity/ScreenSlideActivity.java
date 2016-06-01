@@ -133,6 +133,7 @@ public class ScreenSlideActivity extends BaseActivity {
             case R.id.action_skip:
                 if(!getIntent().getBooleanExtra(EXTRA_IS_SETTINGS_LAUNCH,false))
                     startActivity(new Intent(getBaseContext(),LoginActivity.class));
+                finish();
                 return true;
 
         }

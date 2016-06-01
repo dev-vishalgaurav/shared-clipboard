@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -84,7 +85,15 @@ public final class SharedClipboardManager implements ClipboardOwner {
         System.out.println("Processing: " + clipboard);
         sendClippingToServer(clipboard);
     }
-
+ /**
+   * Place a String on the clipboard, and make this class the
+   * owner of the Clipboard's contents.
+   */
+   public void setClipboardContents(String aString){
+     StringSelection stringSelection = new StringSelection(aString);
+     sysClip.setContents(stringSelection, this);
+  }
+ 
     void sendClippingToServer(String clipping) {
         try {
             URL url = new URL(URL_ADD + "?" + "passcode=" + userId + "&input_type=desktop&clipping="
